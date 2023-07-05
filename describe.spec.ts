@@ -9,12 +9,21 @@ const testScl = new DOMParser().parseFromString(
       xmlns:ens="http://somevalidURI"
     >
       <DataTypeTemplates>
-      <DAType id="someEqual" desc="someDesc">     
+        <DOType id="someBaseDOType">
+          <DA name="stVal" bType="Struct" fc="ST" type="someBaseDAType" />
+        </DOType>
+        <DOType id="someEqualDOType">
+          <DA name="stVal" bType="Struct" fc="ST" type="someEqualDAType" />
+        </DOType>
+        <DOType id="someDiffDOType">
+          <DA name="stVal" bType="Enum" fc="ST" type="someID" />
+        </DOType>
+        <DAType id="someBaseDAType" desc="someDesc">     
           <BDA name="mag" desc="someEqual" bType="Struct" sAddr="someSAddr" type="AnalogueValue"/>
           <BDA name="stVal" desc="someEnumBDA" bType="Enum" sAddr="someSAddr" type="someEnumType"/>
           <ProtNs type="8-MMS">IEC 61850-8-1:2007</ProtNs>
         </DAType>
-        <DAType id="someOtherEqual" desc="someDesc">     
+        <DAType id="someEqualDAType" desc="someDesc">     
           <BDA name="mag" desc="someEqual" bType="Struct" sAddr="someSAddr" type="AnalogueValue"/>
           <BDA name="stVal" desc="someEnumBDA" bType="Enum" sAddr="someSAddr" type="someEnumType"/>
           <ProtNs>IEC 61850-8-1:2007</ProtNs>
@@ -69,9 +78,9 @@ const baseEnumType = testScl.querySelector("#someID")!;
 const diffEnumType = testScl.querySelector("#someDiffID")!;
 const equalEnumType = testScl.querySelector("#someOtherID")!;
 
-const baseDAType = testScl.querySelector("#someEqual")!;
-const equalDAType = testScl.querySelector("#someOtherEqual")!;
-const diffDAType1 = testScl.querySelector("#AnalogueValue")!;
+const baseDOType = testScl.querySelector("#someBaseDOType")!;
+const equalDOType = testScl.querySelector("#someEqualDOType")!;
+const diffDOType = testScl.querySelector("#someDiffDOType")!;
 
 describe("Describe SCL elements function", () => {
   it("returns undefined with missing describe function", () =>
@@ -90,13 +99,13 @@ describe("Describe SCL elements function", () => {
       JSON.stringify(describeSclElement(equalEnumType))
     ));
 
-  it("returns same description with semantically equal DAType's", () =>
-    expect(JSON.stringify(describeSclElement(baseDAType))).to.equal(
-      JSON.stringify(describeSclElement(equalDAType))
+  it("returns same description with semantically equal DOType's", () =>
+    expect(JSON.stringify(describeSclElement(baseDOType))).to.equal(
+      JSON.stringify(describeSclElement(equalDOType))
     ));
 
-  it("returns different description with unequal DAType elements", () =>
-    expect(JSON.stringify(describeSclElement(baseDAType))).to.not.equal(
-      JSON.stringify(describeSclElement(diffDAType1))
+  it("returns different description with unequal DOType elements", () =>
+    expect(JSON.stringify(describeSclElement(baseDOType))).to.not.equal(
+      JSON.stringify(describeSclElement(diffDOType))
     ));
 });
