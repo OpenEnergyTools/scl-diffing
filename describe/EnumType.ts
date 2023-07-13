@@ -1,5 +1,11 @@
 import { NamingDescription, describeNaming } from "./Naming.js";
 
+export function isEnumTypeDescription(
+  type: EnumTypeDescription
+): type is EnumTypeDescription {
+  return (type as EnumTypeDescription).enumVals !== undefined;
+}
+
 export interface EnumTypeDescription extends NamingDescription {
   enumVals: Record<number, { desc: string; content: string }>;
 }
